@@ -4,8 +4,6 @@ FelipedelosH dic 2020
 this is my vr 0.1 of LokoBall
 
 
-
-
 """
 __author__      = "FelipedelosH"
 
@@ -31,7 +29,11 @@ class LunarLoko:
         self.resolutionH = 480
         # Vars
         self.needToPaintInterface = True # Control if i need paints elements or buttons... in screem
-
+        self.posOfTable = [0, 0, 0, 0] # Sayme a point x0, y0, x, y to the game table
+        # Send info about size of table
+        self.controller.configureZiseOfTable(self.resolutionH)
+        # Puts balls in init
+        self.controller.configureBallsInInt()
         
         self.showDisplay()
 
@@ -64,7 +66,7 @@ class LunarLoko:
             W = self.resolutionW * 0.3
             K = self.resolutionH * 0.1
             for i in range(0, 3):
-                self.screem.create_rectangle(((i*W)+K), (self.resolutionH*.01), ((i+1)*W), (H))
+                self.screem.create_rectangle(((i*W)+K), (self.resolutionH*.01), ((i+1)*W), (H), tags="game")
 
             # Paint a table
             """
@@ -73,9 +75,17 @@ class LunarLoko:
             L <=> l because a screem is HW
             table = A+B
             """
+            L = self.resolutionW * 0.45
+            l = self.resolutionH * 0.88
+            K = self.resolutionH * 0.12
+            # Update a register to controller a post of table
+            self.posOfTable = [(K), (self.resolutionH*0.3), (2*L), (l)]
 
-
+            self.screem.create_rectangle((K), (self.resolutionH*0.3), (2*L), (l), fill="green", tags="table")
             
+            # Paint balls
+            self.paintBalls()
+
             self.needToPaintInterface = False
 
         self.screem.after(30, self.refreshDisplay)
@@ -100,6 +110,7 @@ class LunarLoko:
         """
         self.screem.delete("main")
         self.screem.delete("game")
+        self.screem.delete("balls")
         self.needToPaintInterface = True
         self.btnMainPlayGame.place_forget()
         self.btnMainOptions.place_forget()
@@ -111,6 +122,17 @@ class LunarLoko:
         """
         sys.exit()
 
+    def paintBalls(self):
+        """
+        Paint a balss in a table
+        """
+        for i in self.controller.game.balls:
+            xy = self.controller.returnPosXYBallsInPercent(i.name)
+            x0 = (self.posOfTable[2] - self.posOfTable[0])*xy[0]
+            y0 = self.posOfTable[1]+((self.posOfTable[3] - self.posOfTable[1])*xy[1])
+            
+            self.screem.create_oval(x0, y0, x0+20, y0+20, fill=i.name, tags="balls")
 
 
-billar = LunarLoko()
+
+billar = LunarLoko() # Andre's Felipe Herna'ndes 

@@ -7,4 +7,5 @@ class Ball:
     def __init__(self):
         self.posx = 0 # Pos in table
         self.posy = 0 # Pos in table
-        self.Name = "" # This is a name Red, white or yellow
+        self.radio = 0 # Radius
+        self.name = "" # This is a name Red, white or yellow

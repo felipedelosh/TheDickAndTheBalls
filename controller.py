@@ -22,6 +22,19 @@ class Controller:
         """
         return self.game.gameStatus
 
+    def configureZiseOfTable(self, resolutionW):
+        """
+        When the program runs i need information to define a size of table
+        the table is 2 perfect squares, here only calculate single L for one square
+        """
+        self.game.SizeOfTable = resolutionW * 0.4
+
+    def configureBallsInInt(self):
+        self.game.configureBallsInInt()
+
+    def returnPosXYBallsInPercent(self, key):
+        return self.game.returnPercentOfPosXPosYOfBalls(key)
+
     """
     Methods GAME
     """
