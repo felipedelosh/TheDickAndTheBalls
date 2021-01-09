@@ -10,13 +10,6 @@ from Game import *
 
 class Controller:
     def __init__(self):
-        #Exists Table
-        #Exists 3 ball
-        
-        self.ballA = Ball()
-        self.ballB = Ball()
-        self.ballC = Ball()
-
         self.game = Game()
 
     """
