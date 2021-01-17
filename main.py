@@ -33,12 +33,15 @@ class LunarLoko:
         self.needToPaintInterface = True # Control if i need paints elements or buttons... in screem
         self.posOfTable = [0, 0, 0, 0] # Sayme a point x0, y0, x, y to the game table
         
-        # Send info about size of table
-        self.controller.configureZiseOfTable(self.resolutionH)
-        # Puts balls in init
-        self.controller.configureBallsInInt()
-        
+
+        # Configure game Propiertis
+        self.configureGameProperties()
+
         self.showDisplay()
+
+    def configureGameProperties(self):
+        self.controller.initGame(self.resolutionH)
+        
 
     def showDisplay(self):
         self.display.title("Billar By Loko")
@@ -102,8 +105,9 @@ class LunarLoko:
         # Refresh a target position inside table paint else delete
         if self.controller.getGameStatus() == "game":
             if self.mouseIsInsideOfTable(event.x, event.y):
-                self.controller.configureTargetXY(event.x, event.y, self.posOfTable[0], self.posOfTable[1])
+                self.controller.configureTargetXY(event.x, event.y, self.posOfTable[0], self.posOfTable[1], self.posOfTable[2], self.posOfTable[3])
     
+
 
     def mouseClickLister(self, event):
         """
@@ -111,17 +115,7 @@ class LunarLoko:
             > First i take a mouse x and y and recalculate it inside game table
         2 -> 
         """
-        """
-        print("Click....Ball white")
-        print(self.controller.returnBallXYkey(self.controller.game.ballTarget))
-        print("target")
-        print(self.controller.returnTargetXY())
-        print("table")
-        print(self.posOfTable)
-        """
-        print("Ball...")
         print(self.controller.returnBallXYkey("white"))
-        print("target...")
         print(self.controller.returnTargetXY())
             
 
@@ -144,11 +138,12 @@ class LunarLoko:
         """
         Paint a balss in a table
         """
-        for i in self.controller.game.balls:
+        for i in self.controller.getAllBalls():
             xy = self.controller.returnPosXYBallsInPercent(i.name)
-            x0 = (self.posOfTable[2] - self.posOfTable[0])*xy[0]
-            y0 = self.posOfTable[1]+((self.posOfTable[3] - self.posOfTable[1])*xy[1])
-            
+            # (Distance tableX * %) + pos init table
+            x0 = self.posOfTable[0] + ((self.posOfTable[2] - self.posOfTable[0]) * xy[0])
+            # (Distance tableY * %)
+            y0 = self.posOfTable[1] + ((self.posOfTable[3] - self.posOfTable[1]) * xy[1])
             self.screem.create_oval(x0, y0, x0+20, y0+20, fill=i.name, tags="balls")
 
 
@@ -156,14 +151,20 @@ class LunarLoko:
 
     def paintTarget(self):
         """
-        Play a target to hit the ball
-        delete a before target and paint next target
+        if the game is run need to paint a target to hill the ball (balla nd 2 lines)
+
+        1 - need information:
+
+       
         """
         if self.controller.getGameStatus() == "game":
-            self.deleteTarget()
-            xy = self.controller.returnPosXYTargetInPercent() # Get a target pos
-            x0 = (self.posOfTable[2] - self.posOfTable[0])*xy[0]
-            y0 = self.posOfTable[1]+((self.posOfTable[3] - self.posOfTable[1])*xy[1])
+            self.deleteTarget()# To erase before and paint a new target
+            xy = self.controller.returnPosXYTargetInPercent() # Get a target pos%
+
+            # (Distance tableX * %) + pos init table
+            x0 = self.posOfTable[0] + ((self.posOfTable[2] - self.posOfTable[0]) * xy[0])
+            # (Distance tableY * %)
+            y0 = self.posOfTable[1] + ((self.posOfTable[3] - self.posOfTable[1]) * xy[1])
             self.screem.create_oval(x0, y0, x0+20, y0+20, tags="target")
             self.screem.create_line(x0-10, y0+10, x0+30, y0+10, tags="target")
             self.screem.create_line(x0+10, y0-10, x0+10, y0+30, tags="target")

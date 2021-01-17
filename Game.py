@@ -94,8 +94,9 @@ class Game:
         The target is inside of game table
         return a %X %Y of the target
         """
-        x = (self.target.targetPosX)/(2*self.SizeOfTable)
-        y = (self.target.targetPosY)/self.SizeOfTable
+        x = (self.target.targetPosX) / (2*self.SizeOfTable)
+        y = (self.target.targetPosY) / self.SizeOfTable
+
         return [x, y]
 
 
